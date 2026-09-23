@@ -1,0 +1,19 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "panels": [
+    {"title":"Request rate","type":"timeseries","gridPos":{"h":8,"w":12,"x":0,"y":0},"targets":[{"expr":"sum(rate(billing_api_http_requests_total[5m]))","legendFormat":"requests/sec"}]},
+    {"title":"Error rate","type":"timeseries","gridPos":{"h":8,"w":12,"x":12,"y":0},"targets":[{"expr":"sum(rate(billing_api_http_requests_total{status=~\"4..|5..\"}[5m])) / sum(rate(billing_api_http_requests_total[5m]))","legendFormat":"error ratio"}]},
+    {"title":"HTTP latency p95","type":"timeseries","gridPos":{"h":8,"w":12,"x":0,"y":8},"targets":[{"expr":"histogram_quantile(0.95, sum by (le) (rate(billing_api_http_request_duration_seconds_bucket[5m])))","legendFormat":"p95 seconds"}]},
+    {"title":"HTTP status codes","type":"timeseries","gridPos":{"h":8,"w":12,"x":12,"y":8},"targets":[{"expr":"sum by (status) (rate(billing_api_http_requests_total[5m]))","legendFormat":"{{status}}"}]},
+    {"title":"Service health / process","type":"timeseries","gridPos":{"h":8,"w":12,"x":0,"y":16},"targets":[{"expr":"up{job=\"billing-api\"}","legendFormat":"up"},{"expr":"process_resident_memory_bytes{job=\"billing-api\"}","legendFormat":"resident memory"}]},
+    {"title":"Billing activity","type":"timeseries","gridPos":{"h":8,"w":12,"x":12,"y":16},"targets":[{"expr":"rate(billing_api_invoices_created_total[5m])","legendFormat":"invoices created/sec"},{"expr":"rate(billing_api_invoices_paid_total[5m])","legendFormat":"invoices paid/sec"}]}
+  ],
+  "schemaVersion": 39,
+  "title": "SparrowX Billing API",
+  "uid": "sparrowx-billing-api",
+  "version": 1,
+  "templating": {"list": []},
+  "time": {"from": "now-6h", "to": "now"},
+  "timezone": "browser"
+}

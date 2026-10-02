@@ -1,0 +1,29 @@
+project:
+  name: sparrowx
+  environment: prod
+
+service:
+  name: billing-api
+
+image:
+  nameSpace: sparrowx/prod
+  repository: billingapi
+
+container:
+  port: 8000
+  size: micro
+
+deployment:
+  desiredCount: 1
+
+loadBalancer:
+  pathPattern: /api/billing/*
+  listenerRulePriority: 130
+  healthCheckPath: /health
+  smokeTestPath: /api/billing/health
+
+database:
+  enabled: true
+  endpoint: ''
+  port: 5432
+  name: billingdb

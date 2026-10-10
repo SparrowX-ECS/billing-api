@@ -77,3 +77,15 @@ def test_billing_api_rejects_invalid_requests() -> None:
 
         unknown_invoice = api.post("/api/billing/999999/cancel")
         assert unknown_invoice.status_code == 404, unknown_invoice.text
+
+
+def test_routed_openapi_contains_billing_routes() -> None:
+    with client() as api:
+        response = api.get("/api/billing/openapi.json")
+
+    assert response.status_code == 200, response.text
+    paths = response.json()["paths"]
+    assert "/api/billing/" in paths
+    assert "/api/billing/{invoice_id}" in paths
+    assert "/api/billing/{invoice_id}/pay" in paths
+    assert "/api/billing/{invoice_id}/cancel" in paths

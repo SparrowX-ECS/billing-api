@@ -8,6 +8,8 @@ async def test_health_and_openapi(client: AsyncClient) -> None:
     contract = (await client.get("/openapi.json")).json()
     assert {"/api/billing/", "/api/billing/{invoice_id}", "/api/billing/{invoice_id}/pay", "/api/billing/{invoice_id}/cancel"} <= set(contract["paths"])
     assert "PENDING" in str(contract)
+    routed_contract = (await client.get("/api/billing/openapi.json")).json()
+    assert routed_contract["paths"] == contract["paths"]
 
 
 @pytest.mark.anyio

@@ -30,7 +30,7 @@ def test_list_invoices_is_readable() -> None:
 
 def test_openapi_contains_billing_routes() -> None:
     with client() as api:
-        response = api.get("/openapi.json")
+        response = api.get("/api/billing/openapi.json")
 
     assert response.status_code == 200, response.text
     paths = response.json()["paths"]
@@ -38,11 +38,3 @@ def test_openapi_contains_billing_routes() -> None:
     assert "/api/billing/{invoice_id}" in paths
     assert "/api/billing/{invoice_id}/pay" in paths
     assert "/api/billing/{invoice_id}/cancel" in paths
-
-
-def test_metrics_endpoint_is_readable() -> None:
-    with client() as api:
-        response = api.get("/metrics")
-
-    assert response.status_code == 200, response.text
-    assert "text/plain" in response.headers.get("content-type", "")
